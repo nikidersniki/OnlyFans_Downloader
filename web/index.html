@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coomer Downloader</title>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>
+        site=0;
+        eel.expose(removeold);
+        function removeold(){
+            console.log("test");
+            var elementsToRemove = document.querySelectorAll(".posts");
+            elementsToRemove.forEach(function(element) {
+                    element.parentNode.removeChild(element);
+            });
+        }
+        eel.expose(createPost);
+        postcount = 0;
+        function createPost(text, img, postid, date) {
+            postcount++;
+            template = document.querySelector("#post-0");
+            let grid = document.querySelector("#grid");
+            let clone = template.cloneNode(true);
+            clone.id = postid;
+            search = document.querySelector("#searchbox").value;
+            grid.appendChild(clone);
+            clone.onclick = function() { eel.download(postid, search, date) };
+
+            console.log(img);
+
+            let name = document.createElement("div");
+            name.classList.add("desc");
+            name.textContent = text;
+            clone.appendChild(name);
+            clone.classList.add("posts");
+            clone.style.backgroundImage = "url(" + img + ")";
+            clone.style.display = "block";
+        }       
+        </script>
+</head>
+<style>
+    body{
+        margin:0;
+        font-family: sans-serif;
+        background-color: hsl(200, 25%, 5%);
+    }
+    form{
+        padding-left: 10%;
+        padding-right: 10%;
+        position: fixed;
+        height:40px;
+        display:flex;
+        justify-content: space-around;
+        background-color: hsla(0, 0%, 0%, 0.661);
+        color:white;
+        width:80%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    form input{
+        background-color: rgb(76, 76, 76);
+        border-radius: 3px;
+        color:white;
+        outline: none;
+        border:none;
+        font-size: 20px;
+        
+    }
+    #grid{
+        width: 100%;
+        display:flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .post{
+        width: 200px;
+        height:200px;
+        margin:20px;
+        color:white;
+        text-align: center;
+        background-size: cover;
+        font-size: 14px;
+        text-shadow: 0 0 5px black;
+    }
+    .desc{
+        background-color: rgba(0, 0, 0, 0.582);
+    }
+    #search{
+        width: 40%;
+        font-size: 20px;
+    }
+    #downloadall{
+        font-size: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        height: fit-content;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color:white;
+        border-radius: 5px;
+        background-color: rgb(76, 76, 76);
+        border: 0;
+    }
+    #side{
+        font-size: 20px;
+    }
+    #s{
+        width: 150px;
+    }
+</style>
+<body>
+    <form>
+        <div id="search">Search: <input id="searchbox" type="text" value="belledelphine" onkeyup="eel.search(this.value, '0')"></div><button id="downloadall" onclick="eel.downloadAll(document.querySelector('#searchbox').value)">Download All Posts</button><div id="side"><input id="s" type="button" value="Show more" onclick="eel.search(document.querySelector('#searchbox').value, site= site+1)"></div>
+    </form>
+    <div id="grid">
+        <div class="post" id="post-0" style="display:none;">
+        </div>
+    </div>
+<script>
+    window.onload = eel.search(document.querySelector("#searchbox").value, '0');
+</script>
+</body>
+</html>
